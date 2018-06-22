@@ -1,0 +1,121 @@
+package SimpleApp;
+
+
+import java.util.Queue;
+import java.util.LinkedList;
+
+public class ProducerConsumer 
+{
+	int item=1;
+	Queue<Integer> queue = new LinkedList<>();
+	
+	//static Thread producer;
+	//static Thread consumer;
+	
+	
+	
+	public void produce()
+	{
+		System.out.println("Producer");
+		try 
+		{
+			while(true)
+			{
+				synchronized(this)
+				{
+					while(queue.size()==10)
+                    {
+                      		wait();
+                  	}
+				
+                    queue.add(item);
+                    System.out.println("Item added "+item);
+                    item++;
+					notify();
+                    Thread.sleep(100);//end of else
+				}						//end of synchronized
+				
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	public void consume()
+	{
+		System.out.println("Consumer");
+        try 
+        {
+			while(true)
+			{		    	
+                synchronized(this)
+                { 
+                                    
+                      while (queue.size()==0)                                        
+                      {            
+                             wait();
+                      }
+                                    
+                      int i= queue.remove();
+                      //item--;
+                      System.out.println("Item Removed "+i);
+                      notifyAll();
+                      Thread.sleep(100);
+				
+				}
+			}
+		} catch (Exception e) { e.printStackTrace();}
+	}
+	
+	
+	public static void main(String[] args) 
+	{
+            final ProducerConsumer  pConsumer=new ProducerConsumer();
+            
+            Thread producer = new Thread(new Runnable() 
+            {         
+                    @Override
+                    public void run()  
+                    {
+                        synchronized(this)
+                        {
+                               pConsumer.produce();
+                        }
+                    }
+            });
+		    
+            Thread consumer = new Thread(new Runnable() 
+            {         
+                    @Override
+                    public void run()  
+                    {
+                        synchronized(this)
+                        {
+                               pConsumer.consume();
+                        }
+                    }
+            });
+		
+		    producer.setName("producer");
+		    consumer.setName("consumer");
+		
+		    producer.start();
+		    consumer.start();
+            try
+            {
+                producer.join();
+                consumer.join();
+            }
+            catch(Exception e)
+            {
+            e.printStackTrace();
+            }
+		
+		//producer.join();
+		
+	}
+
+}

@@ -1,0 +1,185 @@
+package SimpleApp;
+
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.io.IOException;
+import java.io.FileWriter;
+
+public class Day14Task 
+{
+
+	int currentBal;
+	int accno;
+	String accname;
+	Date d = new Date();
+	String date = new SimpleDateFormat("dd/MMM/yyyy").format(d);
+	String time = new SimpleDateFormat("HH:mm:ss").format(d);
+	
+	public void credit(File file)throws IOException
+	{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Enter the amount to be credited");
+		int camount = Integer.parseInt(br.readLine());
+		
+		if(camount>0)
+		{
+			this.currentBal += camount;
+			
+			FileWriter writer = new FileWriter(file);
+			writer.write("Operation Performed: Credit");
+			writer.write("\r\n");
+			writer.write("Credited Amount: "+camount);
+			writer.write("\r\n");
+			writer.write("Final Balance: "+this.currentBal);
+			writer.write("\r\n");
+			writer.write("Date: "+date);
+			writer.write("\r\n");
+			writer.write("Time: "+time);
+			writer.write("\r\n");
+			writer.write("\r\n");
+			writer.close();
+			
+			System.out.println("New Balance: "+this.currentBal);
+		}
+		else
+			System.out.println("No negative transactions are allowed");
+		
+	}
+	
+	
+	public void debit(File file)throws IOException
+	{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Enter the amount to be debited");
+		int damount = Integer.parseInt(br.readLine());
+		
+		if(damount>0)
+		{
+			if(this.currentBal>=damount)
+			{
+				this.currentBal -= damount;
+				
+				FileWriter writer = new FileWriter(file);
+				writer.write("Operation Performed: Debit");
+				writer.write("\r\n");
+				writer.write("Debited Amount: "+damount);
+				writer.write("\r\n");
+				writer.write("Final Balance: "+this.currentBal);
+				writer.write("\r\n");
+				writer.write("Date: "+date);
+				writer.write("\r\n");
+				writer.write("Time: "+time);
+				writer.write("\r\n");
+				writer.write("\r\n");
+				writer.close();
+				
+				System.out.println("Your new Balance: Rs "+this.currentBal);
+			}
+			else
+				System.out.println("You don't have enough balance to debit");
+		}
+		else
+			System.out.println("No Negative Transactions allowed");
+		
+	}
+	
+	
+	
+	public void delete(File file)
+	{
+		if(file.delete())
+			System.out.println("Account Deleted!");
+	}
+	
+	public static void main(String[] args) 
+	{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		Day14Task ob;
+		
+		while(true)        //if a user enters wrong input,  the program won't terminate.
+		{				   //this loop will enable user to enter input again.
+			int b=0;
+			try 
+			{
+				ob = new Day14Task();
+				System.out.println("Enter account details");
+				System.out.println("Enter account number");
+				ob.accno = Integer.parseInt(br.readLine());
+				
+				System.out.println("Enter your name");
+				ob.accname = br.readLine().toUpperCase();    //so  101_Abc 
+				
+				System.out.println("Enter current balance");
+				ob.currentBal = Integer.parseInt(br.readLine());
+				
+
+			}
+			catch (Exception e) 
+			{
+				System.out.println("Enter valid inputs");
+				continue;
+			}
+			try
+			{
+				String fileName = ob.accno+"_"+ob.accname+".txt";
+				File file = new File("C://Users//Vasu Bansal//Desktop//Java//"+fileName);
+					
+				if(file.createNewFile())
+					System.out.println("File Created");
+				else
+					System.out.println(fileName+" File already exists");
+					
+				while(true)
+				{
+					System.out.println();
+					System.out.println("Enter the option:");
+					System.out.println("1 to credit money");
+					System.out.println("2 to debit money");
+					System.out.println("3 to delete the account");
+					System.out.println("4 to exit");
+					int choice = Integer.parseInt(br.readLine());
+						
+					switch(choice)
+					{
+						case 1: ob.credit(file);
+								break;
+								
+						case 2: ob.debit(file);
+								break;
+									
+						case 3: ob.delete(file);
+								b=1;
+								ob = null;
+								break;
+									
+						case 4: System.out.println("\nBye Bye");
+								System.exit(0);		
+					}
+						
+					if(b==1)
+						break;	
+				}//end of while
+				if(b==1)
+				{
+					System.out.println("Do you wish to continue with the new user? Press 1 else 2");
+					int ch = Integer.parseInt(br.readLine());
+					if(ch==1)
+						continue;
+					else
+						break;
+				}
+				
+			}
+			catch(NumberFormatException |IOException e)
+			{
+				System.out.println("Enter valid inputs");
+					
+			}
+		} 	//end of while
+		System.out.println("\nBye Bye");
+	}
+}
