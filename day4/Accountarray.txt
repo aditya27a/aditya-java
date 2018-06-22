@@ -1,0 +1,137 @@
+import java.util.*;
+import java.math.*;
+
+class Accountarray
+{
+  public static int count = -1; 
+  public static void main(String args[])
+  {
+   int acno , flag , choice ,q ;
+   Scanner s = new Scanner(System.in);
+   Accountarray accountholder[] = new Accountarray[100];
+   do
+   { 
+      flag = 1;
+      System.out.println("1.AddAcount"+"\n"+"2.deposit"+"\n"+"3.withdraw"+"\n"+"4.Checkbalance"+"\n"+"5.Exit");
+      System.out.println("\n Enter your choices:");
+      choice = s.nextInt();
+      switch(choice)
+      {
+         case 1:
+         count++;
+         System.out.println("\n count ="+count);
+         accountholder[count] = new Accountarray();
+         accountholder[count].getdetails();
+         break;
+         case 2:
+         System.out.println("\nEnter account no.:");
+         acno = s.nextInt();
+         System.out.println("\n count ="+count);
+         for(int i = 0 ; i<count ;i++)
+         {
+            if(acno == accountholder[count].ac)
+            {
+                accountholder[count].deposit();
+                flag = 0;
+            }
+         }
+         if(flag==1)
+         {
+            System.out.println("account not found."+"\n");
+         }
+         break;
+         case 3:
+         System.out.println("\nEnter account no.:");
+         acno = s.nextInt();
+       for(int i = 0 ; i<count ;i++)
+         {
+            if(acno == accountholder[count].ac)
+            {
+                accountholder[count].withdraw();
+                flag = 0;
+             }
+         }
+         if(flag==1)
+         {
+            System.out.println("account not found."+"\n");
+         }
+         break;
+         case 4:
+         System.out.println("\nEnter account no.:");
+         acno = s.nextInt();
+         for(int i = 0 ; i<count ;i++)
+         {
+            if(acno == accountholder[count].ac)
+            {
+                accountholder[count].balchk();
+                flag = 0;
+            }
+         }
+         if(flag==1)
+         {
+            System.out.println("account not found."+"\n");
+         }
+         break;
+         case 5:
+         System.exit(0);
+         default:
+         System.out.println("ENTER VALID OPTION"+"\n\n");
+       }
+       //System.out.println(" do you want to continue:(1 .yes  0.no");
+       //q = s.nextInt();
+     }while(true);
+  }
+  int ac;
+  float bal,amt;
+  Scanner get=new Scanner(System.in);
+  void getdetails()
+  {
+     
+     Scanner get=new Scanner(System.in);
+    System.out.println("Enter account number:");
+    ac=get.nextInt();
+    System.out.println();
+    System.out.print("Enter initial balance:");
+    bal=get.nextFloat();
+  }
+  void deposit()
+  {
+    System.out.println();
+    System.out.print("Enter Amount:");
+    amt=get.nextInt();
+    bal=bal+amt;
+    System.out.println("Success! Amount deposited.Balance Available:"+bal);
+  }
+  void withdraw()
+  {
+    System.out.println();
+    System.out.print("Enter Amount:");
+    amt=get.nextInt();
+    if(amt>bal)
+    {
+       System.out.println("Insufficient Funds!!");
+    }
+    else
+    {
+       bal=bal-amt;
+       System.out.println("Amount Withdrawn! Available Balance:"+bal);
+    }
+  }
+  void balchk()
+  {
+    System.out.println("Balance available in Account Number"+ac+"is:"+bal);
+  }
+}
+
+
+ 
+
+          
+
+      
+      
+
+
+      
+      
+   
